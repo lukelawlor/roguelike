@@ -27,7 +27,7 @@ void draw_map(void)
 	
 	// Draw entities
 	ELNode *node = &elhead;
-	while (node->next != NULL)
+	while (node->e != NULL)
 	{
 		draw_entity(node->e);
 		node = node->next;

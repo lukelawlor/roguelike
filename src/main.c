@@ -69,7 +69,13 @@ int main(void)
 	}
 
 	// Create a player entity and place it in the world
-	new_entity(1, 1, "Player", '@', player_update);
+	new_entity(1, 1, "Player", 'p', player_update);
+	new_entity(4, 4, "Goblin", 'g', goblin_update);
+	new_entity(4, 4, "Goblin", 'g', goblin_update);
+	new_entity(4, 4, "Goblin", 'g', goblin_update);
+	new_entity(4, 4, "Goblin", 'g', goblin_update);
+	new_entity(4, 4, "Goblin", 'g', goblin_update);
+	new_entity(4, 4, "Goblin", 'g', goblin_update);
 	
 	// Draw the entire map
 	draw_map();
@@ -88,7 +94,7 @@ int main(void)
 	for (;;)
 	{
 		// Update entities
-		for (ELNode *node = &elhead; node->next != NULL; node = node->next)
+		for (ELNode *node = &elhead; node->e != NULL; node = node->next)
 		{
 			(*node->e->update)(node->e);
 		}
