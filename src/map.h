@@ -33,3 +33,9 @@ void draw_map(void);
 
 // Draws a single map space
 void draw_map_space(int y, int x);
+
+// Draws an entity
+#ifndef	ENTITY_H
+#include "entity.h"
+#endif
+void draw_entity(Entity *e);

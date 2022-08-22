@@ -8,8 +8,8 @@
 #include <ncurses.h>
 
 #include "win.h"
-#include "map.h"
 #include "entity.h"
+#include "map.h"
 
 int main(void)
 {
@@ -19,6 +19,15 @@ int main(void)
 		fprintf(stderr, "adventure: error: failed to initialize ncurses\n");
 		exit(EXIT_FAILURE);
 	}
+
+	if (noecho() == ERR)
+	{
+		fprintf(stderr, "adventure: error: ncurses noecho() call failed\n");
+		exit(EXIT_FAILURE);
+	}
+
+	if (curs_set(0) == ERR)
+		fprintf(stderr, "adventure: error: cursor invisibility not supported by terminal\n");
 
 	// Init game windows
 	
@@ -42,14 +51,34 @@ int main(void)
 		}
 	}
 
-	// Draw the entire map
-	draw_map();
-	
 	// Create a player entity and place it in the world
 	Entity *player = new_entity(1, 1, "Player", '@');
 	
+	// Draw the entire map
+	draw_map();
+
 	// Game loop
-	wgetch(mapwin);
+	for (;;)
+	{
+		switch (wgetch(mapwin))
+		{
+			case 'j':
+				move_entity(player, 1, 0);
+				break;
+			case 'k':
+				move_entity(player, -1, 0);
+				break;
+			case 'h':
+				move_entity(player, 0, -1);
+				break;
+			case 'l':
+				move_entity(player, 0, 1);
+				break;
+			case 'q':
+				endwin();
+				exit(EXIT_SUCCESS);
+		}
+	}
 
 	// Game end
 	endwin();
