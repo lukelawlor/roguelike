@@ -2,6 +2,8 @@
  * map.h contains definitions for the game's map and macros to easily access map data
  */
 
+#ifndef	MAP_H
+#define	MAP_H
 // Map dimensions
 #define	MAPH	20
 #define	MAPW	60
@@ -35,7 +37,6 @@ void draw_map(void);
 void draw_map_space(int y, int x);
 
 // Draws an entity
-#ifndef	ENTITY_H
-#include "entity.h"
-#endif
+#include "entity/entity.h"
 void draw_entity(Entity *e);
+#endif

@@ -4,30 +4,42 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #include <ncurses.h>
 
+#include "main.h"
 #include "win.h"
-#include "entity.h"
+#include "entity/entity.h"
 #include "map.h"
+#include "error.h"
+
+// Game area
+char *area;
+
+// Game hour (1-24)
+int hour;
+
+// Game minute (0-59)
+int min;
 
 int main(void)
 {
 	// Init ncurses
 	if (initscr() == NULL)
 	{
-		fprintf(stderr, "adventure: error: failed to initialize ncurses\n");
+		PERR("failed to initialize ncurses");
 		exit(EXIT_FAILURE);
 	}
 
 	if (noecho() == ERR)
 	{
-		fprintf(stderr, "adventure: error: ncurses noecho() call failed\n");
+		PERR("ncurses noecho() call failed");
 		exit(EXIT_FAILURE);
 	}
 
 	if (curs_set(0) == ERR)
-		fprintf(stderr, "adventure: error: cursor invisibility not supported by terminal\n");
+		PERR("cursor invisibility not supported by terminal");
 
 	// Init game windows
 	
@@ -38,6 +50,11 @@ int main(void)
 	
 	// Bring stdscr back
 	refresh();
+
+	// Set global variables
+	area = "Nowhere";
+	hour = 6;
+	min = 0;
 	
 	// Set map data to create a basic map with nothing but air and a rectangular wall border
 	for (int y = 0; y < MAPH; y++)
@@ -52,31 +69,28 @@ int main(void)
 	}
 
 	// Create a player entity and place it in the world
-	Entity *player = new_entity(1, 1, "Player", '@');
+	new_entity(1, 1, "Player", '@', player_update);
 	
 	// Draw the entire map
 	draw_map();
 
+	// Draw infowin
+	draw_infowin();
+	wrefresh(infowin);
+
+	// Printing test text
+	waddstr(statwin, "statwin");
+	wrefresh(statwin);
+	waddstr(talkwin, "talkwin");
+	wrefresh(talkwin);
+
 	// Game loop
 	for (;;)
 	{
-		switch (wgetch(mapwin))
+		// Update entities
+		for (ELNode *node = &elhead; node->next != NULL; node = node->next)
 		{
-			case 'j':
-				move_entity(player, 1, 0);
-				break;
-			case 'k':
-				move_entity(player, -1, 0);
-				break;
-			case 'h':
-				move_entity(player, 0, -1);
-				break;
-			case 'l':
-				move_entity(player, 0, 1);
-				break;
-			case 'q':
-				endwin();
-				exit(EXIT_SUCCESS);
+			(*node->e->update)(node->e);
 		}
 	}
 

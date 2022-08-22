@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 #include "entity.h"
-#include "map.h"
+#include "../map.h"
 
 // Returns a pointer to an Entity list node with a NULL value for e and next
 static ELNode *new_elnode(void);
@@ -14,7 +14,7 @@ static ELNode *new_elnode(void);
 ELNode elhead = {NULL, NULL};
 
 // Returns a pointer to a new Entity struct
-Entity *new_entity(int y, int x, char *name, char c)
+Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e))
 {
 	// Allocating mem for the new Entity and setting values
 	Entity *temp = malloc(sizeof(Entity));
@@ -22,6 +22,7 @@ Entity *new_entity(int y, int x, char *name, char c)
 	temp->x = x;
 	temp->name = name;
 	temp->c = c;
+	temp->update = update;
 
 	// Adding temp to the Entity list
 	ELNode *node = &elhead;

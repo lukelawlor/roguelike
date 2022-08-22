@@ -4,10 +4,8 @@
 
 #ifndef	ENTITY_H
 #define	ENTITY_H
-#endif
-
 // Entity type used to represent entities in the map
-typedef struct {
+typedef struct EntityTag{
 	// Position in map
 	int y;
 	int x;
@@ -16,20 +14,28 @@ typedef struct {
 	
 	// Character used to depict the drawn entity
 	char c;
+
+	// Function run each time the game is updated
+	void (*update)(struct EntityTag *e);
 } Entity;
 
 // Entity linked list
-struct EntityListNode {
+typedef struct EntityListNode {
 	Entity *e;
 	struct EntityListNode *next;
-};
-typedef struct EntityListNode ELNode;
+} ELNode;
 
 // Entity linked list head
 extern ELNode elhead;
 
-// Returns a pointer to a new Entity struct
-Entity *new_entity(int y, int x, char *name, char c);
+// Creates a new entity and adds it to the entity list, returns a pointer to the entity
+Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e));
 
 // Translates an entity's position by (y, x) if there is open space at the new position
 void move_entity(Entity *e, int y, int x);
+
+// Function prototypes for entity update functions
+#define	EINC(e)	void e##_update(Entity *)
+EINC(player);
+
+#endif

@@ -5,7 +5,7 @@
 #include <ncurses.h>
 
 #include "win.h"
-#include "entity.h"
+#include "entity/entity.h"
 #include "map.h"
 
 // Array that stores the character representations of map tile types at the indexes of their values
