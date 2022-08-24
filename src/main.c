@@ -69,13 +69,13 @@ int main(void)
 	}
 
 	// Create a player entity and place it in the world
-	new_entity(1, 1, "Player", 'p', player_update);
+	new_entity(1, 1, "Player", '@', player_update);
 	new_entity(4, 4, "Goblin", 'g', goblin_update);
-	new_entity(4, 4, "Goblin", 'g', goblin_update);
-	new_entity(4, 4, "Goblin", 'g', goblin_update);
-	new_entity(4, 4, "Goblin", 'g', goblin_update);
-	new_entity(4, 4, "Goblin", 'g', goblin_update);
-	new_entity(4, 4, "Goblin", 'g', goblin_update);
+	new_entity(4, 4, "Goblin", 'G', goblin_update);
+	new_entity(4, 4, "Goblin", 'q', goblin_update);
+	new_entity(4, 4, "Goblin", 'p', goblin_update);
+	new_entity(4, 4, "Goblin", 'q', goblin_update);
+	new_entity(4, 4, "Goblin", 'P', goblin_update);
 	
 	// Draw the entire map
 	draw_map();

@@ -33,7 +33,10 @@ extern Mapspace map[MAPH][MAPW];
 // Draws the entire map
 void draw_map(void);
 
-// Draws a single map space
+// Draws a single map space tile
+void draw_map_tile(int y, int x);
+
+// Draws an entire map space (tile and entity)
 void draw_map_space(int y, int x);
 
 // Draws an entity

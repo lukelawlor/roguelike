@@ -50,9 +50,9 @@ void move_entity(Entity *e, int y, int x)
 	if (MAPT(e->y + y, e->x + x) != MAPTILE_AIR)
 		return;
 	
-	// Move entity and redraw parts of the map that have changed
-	draw_map_space(e->y, e->x);
+	// Move the entity and redraw the map spaces at its new and previous positions
 	e->y += y;
 	e->x += x;
 	draw_entity(e);
+	draw_map_space(e->y - y, e->x - x);
 }

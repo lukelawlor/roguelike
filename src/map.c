@@ -23,9 +23,9 @@ void draw_map(void)
 	// Draw map tiles
 	for (int y = 0; y < MAPH; y++)
 		for (int x = 0; x < MAPW; x++)
-			draw_map_space(y, x);
+			draw_map_tile(y, x);
 	
-	// Draw entities
+	// Draw all entities
 	ELNode *node = &elhead;
 	while (node->e != NULL)
 	{
@@ -34,8 +34,8 @@ void draw_map(void)
 	}
 }
 
-// Draws a single map space
-void draw_map_space(int y, int x)
+// Draws the tile of a single map space
+void draw_map_tile(int y, int x)
 {
 	mvwaddch(mapwin, y, x, MAPTC(MAPT(y, x)));
 }
@@ -44,4 +44,22 @@ void draw_map_space(int y, int x)
 void draw_entity(Entity *e)
 {
 	mvwaddch(mapwin, e->y, e->x, e->c);
+}
+
+// Draws an entire map space (tile and entity)
+void draw_map_space(int y, int x)
+{
+	draw_map_tile(y, x);
+
+	// Check if any entities are at the map space coordinates and draw them if so
+	for (ELNode *node = &elhead; node->e != NULL; node = node->next)
+	{
+		if (node->e->y == y && node->e->x == x)
+		{
+			draw_entity(node->e);
+			
+			// One entity can be drawn at max, so the function call ends here
+			return;
+		}
+	}
 }
