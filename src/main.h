@@ -1,5 +1,5 @@
 /*
- * main.h contains miscellaneous macros
+ * main.h contains miscellaneous macros and extern declarations for miscellaneous, commonly-used global variables
  */
 
 // Game details
@@ -9,8 +9,15 @@
 // 24 hour time formatting flag
 #define	HOURS24		0
 
+// Increase in game ticks per game loop iteration
+#define	FRAME_TICK_INC	1
+
 // Game area
 extern char *area;
 
 // Game time
 extern int hour, min;
+
+// Player entity
+#include "entity/entity.h"
+extern Entity *player;

@@ -23,6 +23,8 @@ Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e))
 	temp->name = name;
 	temp->c = c;
 	temp->update = update;
+	temp->update_tick = 1;
+	temp->tick = 0;
 
 	// Adding temp to the Entity list
 	ELNode *node = &elhead;

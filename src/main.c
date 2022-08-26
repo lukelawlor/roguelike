@@ -23,6 +23,9 @@ int hour;
 // Game minute (0-59)
 int min;
 
+// Player entity
+Entity *player;
+
 int main(void)
 {
 	// Init ncurses
@@ -69,13 +72,14 @@ int main(void)
 	}
 
 	// Create a player entity and place it in the world
-	new_entity(1, 1, "Player", '@', player_update);
-	new_entity(4, 4, "Goblin", 'g', goblin_update);
-	new_entity(4, 4, "Goblin", 'G', goblin_update);
-	new_entity(4, 4, "Goblin", 'q', goblin_update);
-	new_entity(4, 4, "Goblin", 'p', goblin_update);
-	new_entity(4, 4, "Goblin", 'q', goblin_update);
-	new_entity(4, 4, "Goblin", 'P', goblin_update);
+	player = new_entity(1, 1, "Player", '@', player_update);
+	new_entity(4, 4, "Goblin", '1', goblin_update);
+	new_entity(4, 4, "Goblin", '2', goblin_update)->update_tick = 2;
+	new_entity(4, 4, "Goblin", '3', goblin_update)->update_tick = 3;
+	new_entity(4, 4, "Goblin", '4', goblin_update)->update_tick = 5; 
+	new_entity(4, 4, "Goblin", '5', goblin_update)->update_tick = 10;
+	new_entity(4, 4, "Goblin", '6', goblin_update)->update_tick = 20;
+
 	
 	// Draw the entire map
 	draw_map();
@@ -96,7 +100,18 @@ int main(void)
 		// Update entities
 		for (ELNode *node = &elhead; node->e != NULL; node = node->next)
 		{
-			(*node->e->update)(node->e);
+			// Increase the entity's tick
+			if ((node->e->tick += FRAME_TICK_INC) >= node->e->update_tick)
+			{
+				// Call the entity's update function as many times as the entity's tick goes into its update_tick
+				int updates = node->e->tick / node->e->update_tick;
+
+				for (int i = 0; i < updates; i++)
+					(*node->e->update)(node->e);
+
+				// Reset the entity's tick
+				node->e->tick %= node->e->update_tick;
+			}
 		}
 	}
 

@@ -19,6 +19,12 @@ typedef struct EntityTag{
 
 	// Function run each time the game is updated
 	void (*update)(struct EntityTag *e);
+
+	// The number of game ticks that need to go by for the update function to be called
+	int update_tick;
+
+	// The current number of ticks that have passed (always from 0 to update_tick - 1, inclusive)
+	int tick;
 } Entity;
 
 // Entity linked list
@@ -36,9 +42,8 @@ Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e));
 // Translates an entity's position by (y, x) if there is open space at the new position
 void move_entity(Entity *e, int y, int x);
 
-// Function prototypes for entity update functions
+// Function prototypes for specific entity update and initialization functions
 #define	EINC(e)	void e##_update(Entity *)
 EINC(player);
 EINC(goblin);
-
 #endif

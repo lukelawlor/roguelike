@@ -1,7 +1,8 @@
 /*
  * win.h contains the extern declarations for the game's windows and window dimensions
  */
-
+#ifndef	WIN_H
+#define	WIN_H
 // Window dimensions
 #include "map.h"
 #define	MAPWIN_W	MAPW
@@ -39,3 +40,4 @@ int init_windows(void);
 
 // Updates infowin
 void draw_infowin(void);
+#endif
