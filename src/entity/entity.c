@@ -8,13 +8,13 @@
 #include "../map.h"
 
 // Returns a pointer to an Entity list node with a NULL value for e and next
-static ELNode *new_elnode(void);
+static ELNode *elnode_new(void);
 
 // Entity list head
 ELNode elhead = {NULL, NULL};
 
 // Returns a pointer to a new Entity struct
-Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e))
+Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name)
 {
 	// Allocating mem for the new Entity and setting values
 	Entity *temp = malloc(sizeof(Entity));
@@ -23,7 +23,7 @@ Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e))
 	temp->name = name;
 	temp->c = c;
 	temp->update = update;
-	temp->update_tick = 1;
+	temp->update_tick = update_tick;
 	temp->tick = 0;
 
 	// Adding temp to the Entity list
@@ -31,13 +31,13 @@ Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e))
 	while (node->e != NULL)
 		node = node->next;
 	node->e = temp;
-	node->next = new_elnode();
+	node->next = elnode_new();
 
 	return temp;
 }
 
 // Returns a pointer to an Entity list node with a NULL value for e and next
-static ELNode *new_elnode(void)
+static ELNode *elnode_new(void)
 {
 	ELNode *temp = malloc(sizeof(ELNode));
 	temp->e = NULL;
@@ -46,7 +46,7 @@ static ELNode *new_elnode(void)
 }
 
 // Translates an entity's position by (y, x) if there is open space at the new position
-void move_entity(Entity *e, int y, int x)
+void entity_move(Entity *e, int y, int x)
 {
 	// Check for open space
 	if (MAPT(e->y + y, e->x + x) != MAPTILE_AIR)

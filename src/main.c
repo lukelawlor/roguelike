@@ -72,14 +72,12 @@ int main(void)
 	}
 
 	// Create a player entity and place it in the world
-	player = new_entity(1, 1, "Player", '@', player_update);
-	new_entity(4, 4, "Goblin", '1', goblin_update);
-	new_entity(4, 4, "Goblin", '2', goblin_update)->update_tick = 2;
-	new_entity(4, 4, "Goblin", '3', goblin_update)->update_tick = 3;
-	new_entity(4, 4, "Goblin", '4', goblin_update)->update_tick = 5; 
-	new_entity(4, 4, "Goblin", '5', goblin_update)->update_tick = 10;
-	new_entity(4, 4, "Goblin", '6', goblin_update)->update_tick = 20;
-
+	player = player_new(1, 1);
+	goblin_new(5, 5);
+	goblin_new(5, 5);
+	goblin_new(5, 5);
+	goblin_new(5, 5);
+	goblin_new(5, 5);
 	
 	// Draw the entire map
 	draw_map();
@@ -105,7 +103,6 @@ int main(void)
 			{
 				// Call the entity's update function as many times as the entity's tick goes into its update_tick
 				int updates = node->e->tick / node->e->update_tick;
-
 				for (int i = 0; i < updates; i++)
 					(*node->e->update)(node->e);
 

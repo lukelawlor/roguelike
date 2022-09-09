@@ -4,10 +4,13 @@
  * It also defines function prototypes for the update functions of all entities in the game. The definitions of these functions are found in c source files in the entity directory. These files are named after the entity whose update function they define (e.g. player.c contains the definition for player_update).
  */
 
-#ifndef	ENTITY_H
-#define	ENTITY_H
+#ifndef	ENTITY_ENTITY_H
+#define	ENTITY_ENTITY_H
+
+#include <stdbool.h>
+
 // Entity type used to represent entities in the map
-typedef struct EntityTag{
+typedef struct Entity{
 	// Position in map
 	int y;
 	int x;
@@ -18,7 +21,7 @@ typedef struct EntityTag{
 	char c;
 
 	// Function run each time the game is updated
-	void (*update)(struct EntityTag *e);
+	void (*update)(struct Entity *e);
 
 	// The number of game ticks that need to go by for the update function to be called
 	int update_tick;
@@ -28,22 +31,21 @@ typedef struct EntityTag{
 } Entity;
 
 // Entity linked list
-typedef struct EntityListNode {
+typedef struct ELNode {
 	Entity *e;
-	struct EntityListNode *next;
+	struct ELNode *next;
 } ELNode;
 
 // Entity linked list head
 extern ELNode elhead;
 
 // Creates a new entity and adds it to the entity list, returns a pointer to the entity
-Entity *new_entity(int y, int x, char *name, char c, void (*update)(Entity *e));
+Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name);
 
 // Translates an entity's position by (y, x) if there is open space at the new position
-void move_entity(Entity *e, int y, int x);
+void entity_move(Entity *e, int y, int x);
 
-// Function prototypes for specific entity update and initialization functions
-#define	EINC(e)	void e##_update(Entity *)
-EINC(player);
-EINC(goblin);
+// Headers for individual entities in the game
+#include "player.h"
+#include "goblin.h"
 #endif

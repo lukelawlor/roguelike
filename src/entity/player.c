@@ -8,6 +8,13 @@
 
 #include "../win.h"
 #include "entity.h"
+#include "player.h"
+
+// Creates and returns a pointer to a new player
+Entity *player_new(int y, int x)
+{
+	return entity_new(y, x, '@', player_update, 1, "Player");
+}
 
 // Updates an existing player
 void player_update(Entity *e)
@@ -17,16 +24,16 @@ void player_update(Entity *e)
 	{
 		// Player movement
 		case 'j':
-			move_entity(e, 1, 0);
+			entity_move(e, 1, 0);
 			break;
 		case 'k':
-			move_entity(e, -1, 0);
+			entity_move(e, -1, 0);
 			break;
 		case 'h':
-			move_entity(e, 0, -1);
+			entity_move(e, 0, -1);
 			break;
 		case 'l':
-			move_entity(e, 0, 1);
+			entity_move(e, 0, 1);
 			break;
 		// Quitting the game
 		case 'q':
