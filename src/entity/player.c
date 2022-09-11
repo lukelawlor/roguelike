@@ -13,7 +13,7 @@
 // Creates and returns a pointer to a new player
 Entity *player_new(int y, int x)
 {
-	return entity_new(y, x, '@', player_update, 1, "Player");
+	return entity_new(y, x, '@', player_update, 1, "Player", NULL);
 }
 
 // Updates an existing player

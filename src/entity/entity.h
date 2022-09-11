@@ -15,8 +15,6 @@ typedef struct Entity{
 	int y;
 	int x;
 
-	char *name;
-	
 	// Character used to depict the drawn entity
 	char c;
 
@@ -28,6 +26,12 @@ typedef struct Entity{
 
 	// The current number of ticks that have passed (always from 0 to update_tick - 1, inclusive)
 	int tick;
+
+	// Entity name
+	char *name;
+
+	// Pointer to an "extension struct," which contains extra variables to extend entity functionality
+	void *s;
 } Entity;
 
 // Entity linked list
@@ -40,7 +44,7 @@ typedef struct ELNode {
 extern ELNode elhead;
 
 // Creates a new entity and adds it to the entity list, returns a pointer to the entity
-Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name);
+Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name, void *s);
 
 // Translates an entity's position by (y, x) if there is open space at the new position
 void entity_move(Entity *e, int y, int x);

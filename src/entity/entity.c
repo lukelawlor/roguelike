@@ -14,17 +14,18 @@ static ELNode *elnode_new(void);
 ELNode elhead = {NULL, NULL};
 
 // Returns a pointer to a new Entity struct
-Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name)
+Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name, void *s)
 {
 	// Allocating mem for the new Entity and setting values
 	Entity *temp = malloc(sizeof(Entity));
 	temp->y = y;
 	temp->x = x;
-	temp->name = name;
 	temp->c = c;
 	temp->update = update;
 	temp->update_tick = update_tick;
 	temp->tick = 0;
+	temp->name = name;
+	temp->s = s;
 
 	// Adding temp to the Entity list
 	ELNode *node = &elhead;

@@ -13,7 +13,7 @@ static inline int rand_move(void);
 // Creates and returns a pointer to a new goblin
 Entity *goblin_new(int y, int x)
 {
-	return entity_new(y, x, 'g', goblin_update, 1, "Goblin");
+	return entity_new(y, x, 'g', goblin_update, 1, "Goblin", NULL);
 }
 
 // Updates an existing goblin
