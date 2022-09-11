@@ -1,5 +1,5 @@
 /*
- * map.c contains functions for drawing parts of the game map
+ * map.c contains functions for drawing parts of the game map and loading maps
  */
 
 #include <ncurses.h>

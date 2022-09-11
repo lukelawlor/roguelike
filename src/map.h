@@ -5,8 +5,8 @@
 #ifndef	MAP_H
 #define	MAP_H
 // Map dimensions
-#define	MAPH	20
-#define	MAPW	60
+#define	MAPH	24
+#define	MAPW	80
 
 // Map tile types and characters to represent them
 #define MAPTILE_AIR		0
@@ -24,7 +24,7 @@ extern const char maptile_chars[];
 // Mapspace type used to store the data of each space in the map
 typedef struct {
 	// Map tile type
-	unsigned int tile : 1;
+	unsigned int tile : 4;
 } Mapspace;
 
 // Global map variable (a 2d array representing a grid of map spaces)

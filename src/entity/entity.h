@@ -48,4 +48,5 @@ void entity_move(Entity *e, int y, int x);
 // Headers for individual entities in the game
 #include "player.h"
 #include "goblin.h"
+#include "map_editor.h"
 #endif

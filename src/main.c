@@ -72,7 +72,8 @@ int main(void)
 	}
 
 	// Create a player entity and place it in the world
-	player = player_new(1, 1);
+	//player = player_new(1, 1);
+	map_editor_new(0, 0);
 	goblin_new(5, 5);
 	goblin_new(5, 5);
 	goblin_new(5, 5);
