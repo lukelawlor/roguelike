@@ -63,6 +63,8 @@ int main(void)
 	init_maptile_chars();
 	
 	// Set map data to create a basic map with nothing but air and a rectangular wall border
+	load_map_txt("data/default_map.txt", MAPVIS_SEE);
+	/*
 	for (int y = 0; y < MAPH; y++)
 	{
 		for (int x = 0; x < MAPW; x++)
@@ -88,6 +90,7 @@ int main(void)
 			}
 		}
 	}
+	*/
 
 	// Create a player entity and place it in the world
 	//player = player_new(1, 1);

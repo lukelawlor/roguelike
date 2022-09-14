@@ -8,6 +8,10 @@
 #define	MAPH	24
 #define	MAPW	80
 
+// Number of map tile types and styles for each of them
+#define	MAP_TILE_NUM	2
+#define	MAP_STYLE_NUM	2
+
 // Macro to quickly access characters of map tile types
 #define	MAPTC(map_space)	maptile_chars[map_space->tile][map_space->style]
 
@@ -38,7 +42,7 @@ enum map_space_visibility{
  * The first dimension of the array is the tile type, and the second dimension is the style.
  */
 #include <ncurses.h>
-extern chtype maptile_chars[2][2];
+extern chtype maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
 
 // Mapspace type used to store the data of each space in the map
 typedef struct {
@@ -56,6 +60,9 @@ typedef struct {
 extern Mapspace map[MAPH][MAPW];
 
 void init_maptile_chars(void);
+
+// Loads map data from a text file; prints errors and returns nonzero on error
+int load_map_txt(char *path, enum map_space_visibility default_visibility);
 
 // Draws the entire map
 void draw_map(void);
