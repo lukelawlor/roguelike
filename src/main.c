@@ -58,16 +58,34 @@ int main(void)
 	area = "Nowhere";
 	hour = 6;
 	min = 0;
+
+	// Initialize character representations of map spaces
+	init_maptile_chars();
 	
 	// Set map data to create a basic map with nothing but air and a rectangular wall border
 	for (int y = 0; y < MAPH; y++)
 	{
 		for (int x = 0; x < MAPW; x++)
 		{
-			if (y == 0 || x == 0 || y == MAPH - 1 || x == MAPW - 1)
-				MAPT(y, x) = MAPTILE_WALL;
+			Mapspace *ms = &map[y][x];
+			if (y == 0 || y == MAPH - 1)
+			{
+				ms->tile = MAPTILE_WALL;
+				ms->style = 0;
+				ms->vis = MAPVIS_SEE;
+			}
+			else if (x == 0 || x == MAPW - 1)
+			{
+				ms->tile = MAPTILE_WALL;
+				ms->style = 1;
+				ms->vis = MAPVIS_SEE;
+			}
 			else
-				MAPT(y, x) = MAPTILE_AIR;
+			{
+				ms->tile = MAPTILE_AIR;
+				ms->style = 0;
+				ms->vis = rand() % 2 == 0 ? MAPVIS_SEE : MAPVIS_UNSEEN;
+			}
 		}
 	}
 

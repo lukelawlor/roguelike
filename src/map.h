@@ -8,27 +8,54 @@
 #define	MAPH	24
 #define	MAPW	80
 
-// Map tile types and characters to represent them
-#define MAPTILE_AIR		0
-#define	MAPTILE_WALL		1
-
 // Macro to quickly access characters of map tile types
-#define	MAPTC(tile)	maptile_chars[tile]
+#define	MAPTC(map_space)	maptile_chars[map_space->tile][map_space->style]
 
 // Macro to quickly access map space tile types
 #define	MAPT(y, x)	map[y][x].tile
 
-// Array that stores the character representations of map tile types at the indexes of their values
-extern const char maptile_chars[];
+// Map space tile types
+enum map_space_tile{
+	MAPTILE_AIR,
+	MAPTILE_WALL
+};
+
+// Map space visibility levels
+enum map_space_visibility{
+	// Player has never seen the space
+	MAPVIS_UNSEEN,
+
+	// Player has seen the space before
+	MAPVIS_SEEN,
+
+	// Player can currently see the space
+	MAPVIS_SEE
+};
+
+/*
+ * maptile_chars is a 2d array that stores the character representations of map tile types and their different styles.
+ *
+ * The first dimension of the array is the tile type, and the second dimension is the style.
+ */
+#include <ncurses.h>
+extern chtype maptile_chars[2][2];
 
 // Mapspace type used to store the data of each space in the map
 typedef struct {
-	// Map tile type
-	unsigned int tile : 4;
+	// Tile type
+	enum map_space_tile tile : 1;
+
+	// Tile style (affects appearance of tile type; ranges from 0-1)
+	unsigned int style : 5;
+
+	// Visibility level
+	enum map_space_visibility vis : 2;
 } Mapspace;
 
 // Global map variable (a 2d array representing a grid of map spaces)
 extern Mapspace map[MAPH][MAPW];
+
+void init_maptile_chars(void);
 
 // Draws the entire map
 void draw_map(void);

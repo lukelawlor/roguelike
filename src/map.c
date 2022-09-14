@@ -8,14 +8,24 @@
 #include "entity/entity.h"
 #include "map.h"
 
-// Array that stores the character representations of map tile types at the indexes of their values
-const char maptile_chars[] = {
-	'.',
-	'#'
-};
+/*
+ * maptile_chars is a pointer to a 2d array that stores the character representations of map tile types and their different styles.
+ *
+ * The first dimension of the array is the tile type, and the second dimension is the style.
+ */
+chtype maptile_chars[2][2];
 
 // Global map variable (a 2d array representing a grid of map spaces)
 Mapspace map[MAPH][MAPW];
+
+// Initializes maptile_chars
+void init_maptile_chars(void)
+{
+	maptile_chars[0][0] = '.';
+	maptile_chars[0][1] = '#';
+	maptile_chars[1][0] = '-';
+	maptile_chars[1][1] = '|';
+}
 
 // Draws the entire map
 void draw_map(void)
@@ -37,12 +47,18 @@ void draw_map(void)
 // Draws the tile of a single map space
 void draw_map_tile(int y, int x)
 {
-	mvwaddch(mapwin, y, x, MAPTC(MAPT(y, x)));
+	Mapspace *ms = &map[y][x];
+	if (ms->vis != MAPVIS_SEE)
+		return;
+	mvwaddch(mapwin, y, x, MAPTC(ms));
 }
 
 // Draws an entity
 void draw_entity(Entity *e)
 {
+	Mapspace *ms = &map[e->y][e->x];
+	if (ms->vis != MAPVIS_SEE)
+		return;
 	mvwaddch(mapwin, e->y, e->x, e->c);
 }
 
