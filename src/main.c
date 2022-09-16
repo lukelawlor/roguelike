@@ -62,44 +62,7 @@ int main(void)
 	// Initialize character representations of map spaces
 	init_maptile_chars();
 	
-	// Set map data to create a basic map with nothing but air and a rectangular wall border
-	load_map_txt("data/default_map.txt", MAPVIS_SEE);
-	/*
-	for (int y = 0; y < MAPH; y++)
-	{
-		for (int x = 0; x < MAPW; x++)
-		{
-			Mapspace *ms = &map[y][x];
-			if (y == 0 || y == MAPH - 1)
-			{
-				ms->tile = MAPTILE_WALL;
-				ms->style = 0;
-				ms->vis = MAPVIS_SEE;
-			}
-			else if (x == 0 || x == MAPW - 1)
-			{
-				ms->tile = MAPTILE_WALL;
-				ms->style = 1;
-				ms->vis = MAPVIS_SEE;
-			}
-			else
-			{
-				ms->tile = MAPTILE_AIR;
-				ms->style = 0;
-				ms->vis = rand() % 2 == 0 ? MAPVIS_SEE : MAPVIS_UNSEEN;
-			}
-		}
-	}
-	*/
-
-	// Create a player entity and place it in the world
-	//player = player_new(1, 1);
-	map_editor_new(0, 0);
-	goblin_new(5, 5);
-	goblin_new(5, 5);
-	goblin_new(5, 5);
-	goblin_new(5, 5);
-	goblin_new(5, 5);
+	load_map_txt("data/default_map.txt");
 	
 	// Draw the entire map
 	draw_map();

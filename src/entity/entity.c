@@ -13,6 +13,13 @@ static ELNode *elnode_new(void);
 // Entity list head
 ELNode elhead = {NULL, NULL};
 
+// Entity id list (contains pointers to constructors for entities, used for spawning entities based on their "id" when loading maps)
+Entity *(*entity_id_list[3])(int y, int x) = {
+	player_new,
+	goblin_new,
+	map_editor_new
+};
+
 // Returns a pointer to a new Entity struct
 Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name, void *s)
 {

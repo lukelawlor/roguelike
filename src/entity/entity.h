@@ -43,6 +43,9 @@ typedef struct ELNode {
 // Entity linked list head
 extern ELNode elhead;
 
+// Entity id list (contains pointers to constructors for entities, used for spawning entities based on their "id" when loading maps)
+extern Entity *(*entity_id_list[3])(int y, int x);
+
 // Creates a new entity and adds it to the entity list, returns a pointer to the entity
 Entity *entity_new(int y, int x, char c, void (*update)(Entity *e), int update_tick, char *name, void *s);
 

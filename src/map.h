@@ -36,14 +36,6 @@ enum map_space_visibility{
 	MAPVIS_SEE
 };
 
-/*
- * maptile_chars is a 2d array that stores the character representations of map tile types and their different styles.
- *
- * The first dimension of the array is the tile type, and the second dimension is the style.
- */
-#include <ncurses.h>
-extern chtype maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
-
 // Mapspace type used to store the data of each space in the map
 typedef struct {
 	// Tile type
@@ -56,13 +48,21 @@ typedef struct {
 	enum map_space_visibility vis : 2;
 } Mapspace;
 
+/*
+ * maptile_chars is a 2d array that stores the character representations of map tile types and their different styles.
+ *
+ * The first dimension of the array is the tile type, and the second dimension is the style.
+ */
+#include <ncurses.h>
+extern chtype maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
+
 // Global map variable (a 2d array representing a grid of map spaces)
 extern Mapspace map[MAPH][MAPW];
 
 void init_maptile_chars(void);
 
 // Loads map data from a text file; prints errors and returns nonzero on error
-int load_map_txt(char *path, enum map_space_visibility default_visibility);
+int load_map_txt(char *path);
 
 // Draws the entire map
 void draw_map(void);
