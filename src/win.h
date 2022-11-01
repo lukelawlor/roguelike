@@ -24,16 +24,16 @@
 #define	TALKWIN_W	MAPW
 
 // Game map window
-extern WINDOW *mapwin;
+extern WINDOW *g_mapwin;
 
 // Basic info window (game name, version, area, time)
-extern WINDOW *infowin;
+extern WINDOW *g_infowin;
 
 // Player stats or inventory window
-extern WINDOW *statwin;
+extern WINDOW *g_statwin;
 
 // Dialogue window
-extern WINDOW *talkwin;
+extern WINDOW *g_talkwin;
 
 // Initializes game windows, returns nonzero and prints errors on error
 int init_windows(void);

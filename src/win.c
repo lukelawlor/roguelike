@@ -11,41 +11,45 @@
 #include "error.h"
 
 // Game map window
-WINDOW *mapwin;
+WINDOW *g_mapwin;
 
 // Basic info window (game name, version, area, time)
-WINDOW *infowin;
+WINDOW *g_infowin;
 
 // Player stats or inventory window
-WINDOW *statwin;
+WINDOW *g_statwin;
 
 // Dialogue window
-WINDOW *talkwin;
+WINDOW *g_talkwin;
 
 // Initializes game windows, returns nonzero and prints errors on error
 int init_windows(void)
 {
-	if ((mapwin = newwin(MAPWIN_H, MAPWIN_W, 0, 0)) == NULL)
+	if ((g_mapwin = newwin(MAPWIN_H, MAPWIN_W, 0, 0)) == NULL)
 	{
-		PERR("mapwin creation failed");
+		PERR();
+		fprintf(stderr, "mapwin creation failed");
 		return 1;
 	}
 
-	if ((infowin = newwin(INFOWIN_H, INFOWIN_W, INFOWIN_Y, INFOWIN_X)) == NULL)
+	if ((g_infowin = newwin(INFOWIN_H, INFOWIN_W, INFOWIN_Y, INFOWIN_X)) == NULL)
 	{
-		PERR("infowin creation failed");
+		PERR();
+		fprintf(stderr, "infowin creation failed");
 		return 1;
 	}
 
-	if ((statwin = newwin(STATWIN_H, STATWIN_W, STATWIN_Y, STATWIN_X)) == NULL)
+	if ((g_statwin = newwin(STATWIN_H, STATWIN_W, STATWIN_Y, STATWIN_X)) == NULL)
 	{
-		PERR("statwin creation failed");
+		PERR();
+		fprintf(stderr, "statwin creation failed");
 		return 1;
 	}
 
-	if ((talkwin = newwin(TALKWIN_H, TALKWIN_W, TALKWIN_Y, TALKWIN_X)) == NULL)
+	if ((g_talkwin = newwin(TALKWIN_H, TALKWIN_W, TALKWIN_Y, TALKWIN_X)) == NULL)
 	{
-		PERR("talkwin creation failed");
+		PERR();
+		fprintf(stderr, "talkwin creation failed");
 		return 1;
 	}
 
@@ -56,19 +60,19 @@ int init_windows(void)
 void draw_infowin(void)
 {
 	// Print game name, version, and area
-	wprintw(infowin, "%s v%s\n\n%s\n", GAME_NAME, GAME_VERSION, area);
+	wprintw(g_infowin, "%s v%s\n\n%s\n", GAME_NAME, GAME_VERSION, g_area);
 
 	// Print the time
-	#if HOURS24
-		wprintw(infowin, "%d:", hour);
-		if (min < 10)
-			waddch(infowin, '0');
-		wprintw(infowin, "%d", min);
-	#else
-		wprintw(infowin, "%d:", hour > 12 ? hour - 12 : hour);
-		if (min < 10)
-			waddch(infowin, '0');
-		wprintw(infowin, "%d ", min);
-		waddstr(infowin, hour >= 12 && hour != 24 ? "pm" : "am");
-	#endif
+#if HOURS24
+	wprintw(g_infowin, "%d:", g_hour);
+	if (g_min < 10)
+		waddch(g_infowin, '0');
+	wprintw(g_infowin, "%d", g_min);
+#else
+	wprintw(g_infowin, "%d:", g_hour > 12 ? g_hour - 12 : g_hour);
+	if (g_min < 10)
+		waddch(g_infowin, '0');
+	wprintw(g_infowin, "%d ", g_min);
+	waddstr(g_infowin, g_hour >= 12 && g_hour != 24 ? "pm" : "am");
+#endif
 }

@@ -15,13 +15,16 @@
 #include "error.h"
 
 // Game area
-char *area;
+char *g_area;
 
 // Game hour (1-24)
-int hour;
+char g_hour;
 
 // Game minute (0-59)
-int min;
+char g_min;
+
+// Game seconds (0-59)
+char g_sec;
 
 // Player entity
 Entity *player;
@@ -31,18 +34,26 @@ int main(void)
 	// Init ncurses
 	if (initscr() == NULL)
 	{
-		PERR("failed to initialize ncurses");
+		PERR();
+		fprintf(stderr, "failed to initialize ncurses\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (noecho() == ERR)
 	{
-		PERR("ncurses noecho() call failed");
+		endwin();
+		PERR();
+		fprintf(stderr, "ncurses noecho() call failed\n");
 		exit(EXIT_FAILURE);
 	}
 
 	if (curs_set(0) == ERR)
-		PERR("cursor invisibility not supported by terminal");
+	{
+		endwin();
+		PERR();
+		fprintf(stderr, "cursor invisibility not supported by terminal\n");
+		refresh();
+	}
 
 	// Init game windows
 	
@@ -55,27 +66,27 @@ int main(void)
 	refresh();
 
 	// Set global variables
-	area = "Nowhere";
-	hour = 6;
-	min = 0;
+	g_area = "Nowhere";
 
 	// Initialize character representations of map spaces
 	init_maptile_chars();
 	
+	endwin();
 	load_map_txt("data/default_map.txt");
+	refresh();
 	
 	// Draw the entire map
 	draw_map();
 
 	// Draw infowin
 	draw_infowin();
-	wrefresh(infowin);
+	wrefresh(g_infowin);
 
 	// Printing test text
-	waddstr(statwin, "statwin");
-	wrefresh(statwin);
-	waddstr(talkwin, "talkwin");
-	wrefresh(talkwin);
+	waddstr(g_statwin, "statwin");
+	wrefresh(g_statwin);
+	waddstr(g_talkwin, "talkwin");
+	wrefresh(g_talkwin);
 
 	// Game loop
 	for (;;)
@@ -95,9 +106,27 @@ int main(void)
 				node->e->tick %= node->e->update_tick;
 			}
 		}
+
+		// Increase game time
+		g_sec += 30;
+
+		if (g_sec > 59)
+		{
+			g_min += g_sec / 60;
+			g_sec %= 60;
+			if (g_min > 59)
+			{
+				g_hour += g_min / 60;
+				g_min %= 60;
+				if (g_hour > 24)
+					g_hour %= 24;
+			}
+			draw_infowin();
+		}
 	}
 
 	// Game end
 	endwin();
 	exit(EXIT_SUCCESS);
 }
+

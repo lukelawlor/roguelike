@@ -6,7 +6,7 @@
 
 #include <ncurses.h>
 
-#include "../win.h"
+#include "../input.h"
 #include "entity.h"
 #include "player.h"
 
@@ -20,7 +20,7 @@ Entity *player_new(int y, int x)
 void player_update(Entity *e)
 {
 	// Get input from the user
-	switch (wgetch(mapwin))
+	switch (GETC())
 	{
 		// Player movement
 		case 'j':

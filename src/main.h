@@ -2,6 +2,9 @@
  * main.h contains miscellaneous macros and extern declarations for miscellaneous, commonly-used global variables
  */
 
+#ifndef	MAIN_H
+#define	MAIN_H
+
 // Game details
 #define	GAME_NAME	"Adventure"
 #define	GAME_VERSION	"0.0.0"
@@ -13,11 +16,13 @@
 #define	FRAME_TICK_INC	1
 
 // Game area
-extern char *area;
+extern char *g_area;
 
 // Game time
-extern int hour, min;
+extern char g_hour, g_min, g_sec;
 
 // Player entity
 #include "entity/entity.h"
 extern Entity *player;
+
+#endif

@@ -5,18 +5,18 @@
 #ifndef	MAP_H
 #define	MAP_H
 // Map dimensions
-#define	MAPH	24
-#define	MAPW	80
+#define	MAPH	19
+#define	MAPW	62
 
 // Number of map tile types and styles for each of them
 #define	MAP_TILE_NUM	2
 #define	MAP_STYLE_NUM	2
 
 // Macro to quickly access characters of map tile types
-#define	MAPTC(map_space)	maptile_chars[map_space->tile][map_space->style]
+#define	MAPTC(map_space)	g_maptile_chars[map_space->tile][map_space->style]
 
 // Macro to quickly access map space tile types
-#define	MAPT(y, x)	map[y][x].tile
+#define	MAPT(y, x)	g_map[y][x].tile
 
 // Map space tile types
 enum map_space_tile{
@@ -54,10 +54,10 @@ typedef struct {
  * The first dimension of the array is the tile type, and the second dimension is the style.
  */
 #include <ncurses.h>
-extern chtype maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
+extern chtype g_maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
 
 // Global map variable (a 2d array representing a grid of map spaces)
-extern Mapspace map[MAPH][MAPW];
+extern Mapspace g_map[MAPH][MAPW];
 
 void init_maptile_chars(void);
 

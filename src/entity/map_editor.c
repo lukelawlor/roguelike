@@ -6,7 +6,8 @@
 
 #include <ncurses.h>
 
-#include "../win.h"
+#include "../error.h"
+#include "../input.h"
 #include "entity.h"
 #include "map_editor.h"
 
@@ -19,16 +20,19 @@ typedef struct MapEditor{
 	bool auto_tile;
 } MapEditor;
 
-// Extension struct pointer
-static MapEditor *s;
-
 // Moves the map editor
 static inline void map_editor_move(Entity *e, MapEditor *s, int y, int x);
 
 // Creates and returns a pointer to a new map_editor
 Entity *map_editor_new(int y, int x)
 {
-	s = malloc(sizeof(MapEditor));
+	MapEditor *s;
+	if ((s = malloc(sizeof(MapEditor))) == NULL)
+	{
+		PERR();
+		fprintf(stderr, "failed to malloc space for map editor extension struct\n");
+		return NULL;
+	}
 	s->last_tile = MAPTILE_AIR;
 	s->auto_tile = false;
 	return entity_new(y, x, '$', map_editor_update, 1, "Map Editor", s);
@@ -37,10 +41,10 @@ Entity *map_editor_new(int y, int x)
 // Updates an existing map_editor
 void map_editor_update(Entity *e)
 {
-	s = (MapEditor *) e->s;
+	MapEditor *s = (MapEditor *) e->s;
 
 	// Get input from the user
-	switch (wgetch(mapwin))
+	switch (GETC())
 	{
 		// Movement
 		case 'j':

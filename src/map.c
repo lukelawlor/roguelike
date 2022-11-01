@@ -17,18 +17,18 @@
  *
  * The first dimension of the array is the tile type, and the second dimension is the style.
  */
-chtype maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
+chtype g_maptile_chars[MAP_TILE_NUM][MAP_STYLE_NUM];
 
 // Global map variable (a 2d array representing a grid of map spaces)
-Mapspace map[MAPH][MAPW];
+Mapspace g_map[MAPH][MAPW];
 
 // Initializes maptile_chars
 void init_maptile_chars(void)
 {
-	maptile_chars[0][0] = '.';
-	maptile_chars[0][1] = '#';
-	maptile_chars[1][0] = '-';
-	maptile_chars[1][1] = '|';
+	g_maptile_chars[0][0] = '.';
+	g_maptile_chars[0][1] = '#';
+	g_maptile_chars[1][0] = '-';
+	g_maptile_chars[1][1] = '|';
 }
 
 // Loads map data from a text file; prints errors and returns nonzero on error
@@ -55,14 +55,14 @@ int load_map_txt(char *path)
 		for (int x = 0; x < MAPW; x++)
 		{
 			uc = fgetc(mapfile);
-			Mapspace *ms = &map[y][x];
+			Mapspace *ms = &g_map[y][x];
 			
 			// Get tile type and style
 			for (int tile = 0; tile < MAP_TILE_NUM; tile++)
 			{
 				for (int style = 0; style < MAP_STYLE_NUM; style++)
 				{
-					if (maptile_chars[tile][style] == uc)
+					if (g_maptile_chars[tile][style] == uc)
 					{
 						// Tile & style found
 						ms->tile = tile;
@@ -73,12 +73,13 @@ int load_map_txt(char *path)
 			}
 
 			// Tile & style not found, use default values and print a warning
-			fprintf(stderr, "roguelike: warning: map tile & style not found for space at y%d x%d\n", y, x);
+			PERR();
+			fprintf(stderr, "map tile & style not found for space at y%d x%d\n", y, x);
 			ms->tile = MAPTILE_AIR;
 			ms->style = 0;
 
 			// Set visibility
-			load_map_txt_set_vis:
+		load_map_txt_set_vis:
 			ms->vis = MAPVIS_SEE;
 		}
 		// Skip newline character at the end of a row
@@ -96,8 +97,14 @@ int load_map_txt(char *path)
 				int id, y, x;
 				fscanf(mapfile, "%d.%d.%d\n", &id, &y, &x);
 
+				// TODO: add better error checking after fscanf calls here
+
 				// Call the entity constructor
-				(*entity_id_list[id])(y, x);
+				if ((*entity_id_list[id])(y, x) == NULL)
+				{
+					PERR();
+					fprintf(stderr, "failed to create entity with id %d at y%d x%d\n", id, y, x);
+				}
 				break;
 			}
 			case 'v':
@@ -115,14 +122,13 @@ int load_map_txt(char *path)
 				// Make every map space in the rectangle unseen
 				for (y = y1; y < y2; y++)
 					for (x = x1; x < x2; x++)
-						map[y][x].vis = MAPVIS_UNSEEN;
+						g_map[y][x].vis = MAPVIS_UNSEEN;
 				break;
 			}
 			default:
 			{
-				endwin();
-				fprintf(stderr, "roguelike: unknown map command found \"%c\", aborting map command reading.\n", c);
-				refresh();
+				PERR();
+				fprintf(stderr, "unknown map command found \"%c\", aborting map command reading.\n", c);
 				fclose(mapfile);
 				return 1;
 			}
@@ -153,19 +159,19 @@ void draw_map(void)
 // Draws the tile of a single map space
 void draw_map_tile(int y, int x)
 {
-	Mapspace *ms = &map[y][x];
+	Mapspace *ms = &g_map[y][x];
 	if (ms->vis != MAPVIS_SEE)
 		return;
-	mvwaddch(mapwin, y, x, MAPTC(ms));
+	mvwaddch(g_mapwin, y, x, MAPTC(ms));
 }
 
 // Draws an entity
 void draw_entity(Entity *e)
 {
-	Mapspace *ms = &map[e->y][e->x];
+	Mapspace *ms = &g_map[e->y][e->x];
 	if (ms->vis != MAPVIS_SEE)
 		return;
-	mvwaddch(mapwin, e->y, e->x, e->c);
+	mvwaddch(g_mapwin, e->y, e->x, e->c);
 }
 
 // Draws an entire map space (tile and entity)
