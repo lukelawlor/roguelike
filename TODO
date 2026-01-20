@@ -1,7 +1,8 @@
 Time passing
 Melee attacking enemies
 Fireballs/Arrows
-Enemies shooting fireballs and arrows
+Enemies shooting fireballs, magic missiles and arrows
+Allies
 Destroying entities
 Random dungeon generation
 Player creation screen
@@ -9,3 +10,5 @@ Game over screen
 Saving map files
 Loading map files
 Town map
+Walk until hitting a wall
+Repeat commands N amount of times

@@ -10,7 +10,7 @@ CFLAGS := -Wall -Wextra -Werror -g
 DEPFLAGS := -MMD -MP
 LDFLAGS := -lncurses
 
-BINNAME := adventure
+BINNAME := roguelike
 BINPATH := $(BUILD_DIR)/$(BINNAME)
 
 all: $(BINPATH)

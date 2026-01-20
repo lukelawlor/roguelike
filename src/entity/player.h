@@ -1,12 +1,11 @@
-/*
- * player.h contains function prototypes for creating and updating players
- */
+/* 'player.h' contains function prototypes for creating & updating players. */
+#ifndef ENTITY_PLAYER_H
+#define ENTITY_PLAYER_H
 
-#ifndef	ENTITY_PLAYER_H
-#define	ENTITY_PLAYER_H
-// Creates and returns a pointer to a new player
-Entity *player_new(int y, int x);
+/* Create & return a pointer to a new player */
+Entity *player_new (int y, int x);
 
-// Updates a player
-void player_update(Entity *e);
+/* Update a player */
+void player_update (Entity *e);
+
 #endif
