@@ -40,7 +40,7 @@ extern WINDOW *g_talkwin;
 /* Initialize game windows; return nonzero & prints errors on error */
 int init_windows (void);
 
-/* Update 'g_infowin' */
+/* Print to 'g_infowin' & refresh it */
 void draw_infowin (void);
 
 #endif

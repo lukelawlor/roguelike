@@ -8,6 +8,10 @@
 #include "win.h"
 #include "error.h"
 
+/* Strings to signify ante & post meridiem */
+#define STR_ANTE_MERIDIEM "am"
+#define STR_POST_MERIDIEM "pm"
+
 /* Game map window */
 WINDOW *g_mapwin;
 
@@ -68,16 +72,46 @@ draw_infowin (void)
            g_area);
 
   /* Print the time */
-#if HOURS24
-  wprintw (g_infowin, "%d:", g_hour);
-  if (g_min < 10)
-    waddch (g_infowin, '0');
-  wprintw (g_infowin, "%d", g_min);
-#else
-  wprintw (g_infowin, "%d:", g_hour > 12 ? g_hour - 12 : g_hour);
-  if (g_min < 10)
-    waddch (g_infowin, '0');
-  wprintw (g_infowin, "%d ", g_min);
-  waddstr (g_infowin, g_hour >= 12 && g_hour != 24 ? "pm" : "am");
-#endif
+  if (g_hours24)
+    {
+      wprintw (g_infowin, "%d:", g_hour);
+      if (g_min < 10)
+        waddch (g_infowin, '0');
+      wprintw (g_infowin, "%d:", g_min);
+      if (g_sec < 10)
+        waddch (g_infowin, '0');
+      wprintw (g_infowin, "%d ", (int) g_sec);
+    }
+  else
+    {
+      /* Hour to print */
+      char hour;
+      if (g_hour == 0)
+        hour = 12;
+      else if (g_hour <= 12)
+        hour = g_hour;
+      else
+        hour = g_hour - 12;
+      wprintw (g_infowin, "%d:", hour);
+      if (g_min < 10)
+        waddch (g_infowin, '0');
+      wprintw (g_infowin, "%d:", g_min);
+      if (g_sec < 10)
+        waddch (g_infowin, '0');
+      wprintw (g_infowin, "%d ", (int) g_sec);
+      if (g_hour < 12)
+        waddstr (g_infowin, STR_ANTE_MERIDIEM);
+      else
+        waddstr (g_infowin, STR_POST_MERIDIEM);
+    }
+
+  wrefresh (g_infowin);
+
+  /* Clear lines that change & move into the starting position for the
+     next call of this function */
+  wmove (g_infowin, 3, 0);
+  wclrtoeol (g_infowin);
+  wmove (g_infowin, 2, 0);
+  wclrtoeol (g_infowin);
+  wmove (g_infowin, 0, 0);
 }

@@ -61,7 +61,7 @@ void init_maptile_chars (void);
    error */
 int load_map_txt (char *path);
 
-/* Draw the entire map */
+/* Draw the entire map without refreshing the map window */
 void draw_map (void);
 
 /* Draw a single map space tile */

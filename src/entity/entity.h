@@ -23,15 +23,15 @@ typedef struct Entity {
   /* Character used to depict the drawn entity */
   char c;
 
-  /* Function run each time the game is updated */
+  /* Function run each time the entity is updated */
   void (*update) (struct Entity *e);
 
-  /* The number of game ticks that need to go by for the update
+  /* The number of game ticks that need to go by for the 'update'
      function to be called */
   int update_tick;
 
   /* The current number of ticks that have passed (always from 0 to
-     update_tick - 1, inclusive) */
+     'update_tick' - 1, inclusive) */
   int tick;
 
   /* Entity name */

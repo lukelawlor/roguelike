@@ -3,21 +3,27 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+#include <stdbool.h>
+
 /* Game details */
 #define GAME_NAME    "Roguelike"
 #define GAME_VERSION "0.0.0"
 
-/* 24 hour time formatting flag */
-#define HOURS24 0
-
 /* Increase in game ticks per game loop iteration */
-#define FRAME_TICK_INC 1
+extern int g_game_loop_step_tick;
+
+/* Increase in seconds of game time per game loop iteration */
+extern long long g_game_loop_step_sec;
 
 /* Game area */
 extern char *g_area;
 
 /* Game time */
-extern char g_hour, g_min, g_sec;
+extern char g_hour, g_min;
+extern long long g_sec;
+
+/* 24 hour time formatting flag */
+extern bool g_hours24;
 
 /* Player entity */
 #include "entity/entity.h"

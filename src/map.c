@@ -150,7 +150,7 @@ load_map_txt (char *path)
   return 0;
 }
 
-/* Draw the entire map */
+/* Draw the entire map without refreshing the map window */
 void
 draw_map (void)
 {
