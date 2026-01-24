@@ -112,7 +112,7 @@ main (void)
     {
       /* Update entities */
       bool player_exists = false;
-      for (ELNode *node = &elhead; node->e != NULL; node = node->next)
+      for (ELNode *node = g_elhead; node != NULL; node = node->next)
         {
           /* Increase the entity's 'tick' */
           if ((node->e->tick += g_game_loop_step_tick)

@@ -12,7 +12,7 @@ static inline int rand_move (void);
 Entity *
 goblin_new (int y, int x)
 {
-  return entity_new (y, x, 'g', goblin_update, 1, "Goblin", NULL);
+  return entity_new (goblin_update, 1, y, x, 'g', "Goblin");
 }
 
 /* Update an existing goblin */

@@ -1,4 +1,4 @@
-/* 'map_editor.c' contains the update function for the map_editor
+/* 'map_editor.c' contains the update function for the map editor
    entity. */
 #include <stdlib.h>
 
@@ -9,12 +9,12 @@
 #include "entity.h"
 #include "map_editor.h"
 
-/* map_editor extension struct */
+/* Map editor extension struct */
 typedef struct MapEditor {
-  /* The last tile placed by the map_editor */
+  /* The last tile placed by the map editor */
   unsigned int last_tile;
 
-  /* True if the map_editor is automatically placing tiles as it
+  /* True if the map editor is automatically placing tiles as it
      moves */
   bool auto_tile;
 } MapEditor;
@@ -23,7 +23,7 @@ typedef struct MapEditor {
 static inline void map_editor_move (Entity *e, MapEditor *s, int y,
                                     int x);
 
-/* Create & return a pointer to a new map_editor */
+/* Create & return a pointer to a new map editor or NULL on error */
 Entity *
 map_editor_new (int y, int x)
 {
@@ -31,17 +31,24 @@ map_editor_new (int y, int x)
   if ((s = malloc (sizeof (MapEditor))) == NULL)
     {
       PERR ();
-      fprintf (stderr,"failed to malloc space for map editor "
-               "extension struct\n");
+      fprintf (stderr,"failed to allocate memory for a map editor"
+               " extension struc \n");
       return NULL;
     }
+  Entity *e;
+  if ((e = entity_new (map_editor_update, 1, y, x, '$',
+                       "Map Editor")) == NULL)
+    {
+      free (s);
+      return NULL;
+    }
+  e->s = s;
   s->last_tile = MAPTILE_AIR;
   s->auto_tile = false;
-  return entity_new (y, x, '$', map_editor_update, 1, "Map Editor",
-                     s);
+  return e;
 }
 
-/* Update an existing map_editor */
+/* Update an existing map editor */
 void
 map_editor_update (Entity *e)
 {

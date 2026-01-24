@@ -11,7 +11,7 @@
 Entity *
 player_new (int y, int x)
 {
-  return entity_new (y, x, '@', player_update, 1, "Player", NULL);
+  return entity_new (player_update, 1, y, x, '@', "Player");
 }
 
 /* Update an existing player */

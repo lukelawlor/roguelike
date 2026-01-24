@@ -1,12 +1,12 @@
 /* 'map_editor.h' contains function prototypes for creating & updating
-   map_editors. */
+   map editors. */
 #ifndef ENTITY_MAP_EDITOR_H
 #define ENTITY_MAP_EDITOR_H
 
-// Create & return a pointer to a new map_editor
+/* Create & return a pointer to a new map editor or NULL on error */
 Entity *map_editor_new (int y, int x);
 
-// Update a map_editor
+/* Update a map editor */
 void map_editor_update (Entity *e);
 
 #endif

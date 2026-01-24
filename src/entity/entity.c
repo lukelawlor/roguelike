@@ -2,59 +2,108 @@
 #include <stdlib.h>
 
 #include "entity.h"
+#include "../error.h"
 #include "../map.h"
 
-/* Return a pointer to an Entity list node with a 'NULL' value for 'e'
-   & 'next' */
+/* Return a pointer to an Entity list node with a NULL value for 'e' &
+   'next'; return NULL on error */
 static ELNode *elnode_new (void);
 
-/* Entity list head */
-ELNode elhead = { NULL, NULL };
+/* Pointer to entity list head & tail */
+ELNode *g_elhead, *g_eltail;
 
 /* Entity id list (contains pointers to constructors for entities,
    used for spawning entities based on their "id" when loading
    maps) */
-Entity *(*entity_id_list[ENT_MAX]) (int y, int x) = {
+Entity *(*g_ent_id_list[ENT_MAX]) (int y, int x) = {
   player_new,
   goblin_new,
   map_editor_new
 };
 
-/* Return a pointer to a new Entity struct */
+/* Return a pointer to a new Entity struct or NULL on error */
 Entity *
-entity_new (int y, int x, char c, void (*update)(Entity *e),
-            int update_tick, char *name, void *s)
+entity_new (void (*update) (Entity *e), int update_tick,
+            int y, int x, char c, char *name)
 {
-  /* Allocate memory for the new Entity & setting values */
-  Entity *temp = malloc (sizeof (Entity));
-  temp->y = y;
-  temp->x = x;
-  temp->c = c;
-  temp->update = update;
-  temp->update_tick = update_tick;
-  temp->tick = 0;
-  temp->name = name;
-  temp->s = s;
+  Entity *e;
+  if ((e = malloc (sizeof (Entity))) == NULL)
+    {
+      PERR ();
+      fprintf (stderr,
+               "failed to allocate memory for a new entity struct\n");
+      return NULL;
+    }
+  ELNode *node;
+  if ((node = elnode_new ()) == NULL)
+    {
+      free (e);
+      return NULL;
+    }
+  node->e = e;
 
-  /* Add the new Entity struct to the Entity list */
-  ELNode *node = &elhead;
-  while (node->e != NULL)
-    node = node->next;
-  node->e = temp;
-  node->next = elnode_new();
+  /* Use parameters */
+  e->update = update;
+  e->update_tick = update_tick;
+  e->tick = 0;
+  e->y = y;
+  e->x = x;
+  e->c = c;
+  e->name = name;
 
-  return temp;
+  /* Set default entity values */
+  e->hp = ENT_DEFAULT_HP;
+  e->mp = ENT_DEFAULT_MP;
+  e->ac = ENT_DEFAULT_AC;
+
+  /* NULL initialize 's' */
+  e->s = NULL;
+
+  /* Add the new entity struct to the entity list */
+  if (g_elhead == NULL)
+    g_elhead = g_eltail = node;
+  else
+    {
+      g_eltail->next = node;
+      g_eltail = node;
+    }
+  
+  return e;
 }
 
-/* Return a pointer to an Entity list node with a 'NULL' value for 'e'
-   & 'next' */
+/* Return a pointer to an Entity list node with a NULL value for 'e' &
+   'next'; return NULL on error */
 static ELNode *
 elnode_new (void)
 {
-  ELNode *temp = malloc (sizeof (ELNode));
-  temp->e = NULL;
-  temp->next = NULL;
-  return temp;
+  ELNode *node;
+  if ((node = malloc (sizeof (ELNode))) == NULL)
+    {
+      PERR ();
+      fprintf (stderr,
+               "failed to allocate memory for a new entity node");
+      return NULL;
+    }
+  node->e = NULL;
+  node->next = NULL;
+  return node;
+}
+
+/* Free the memory of all entities in the entity list */
+void
+entity_free_all (void)
+{
+  ELNode *node, *next;
+  node = g_elhead;
+  while (node != NULL)
+    {
+      next = node->next;
+      free (node->e->s);
+      free (node->e);
+      free (node);
+      node = next;
+    }
+  g_elhead = g_eltail = NULL;
 }
 
 /* Translate an entity's position by (y, x) if there is open space at
@@ -65,7 +114,7 @@ entity_move (Entity *e, int y, int x)
   /* Check for open space */
   if (MAPT (e->y + y, e->x + x) != MAPTILE_AIR)
     return;
-        
+
   /* Move the entity & redraw the map spaces at its new & old
      positions */
   e->y += y;

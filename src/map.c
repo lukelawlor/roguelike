@@ -108,7 +108,7 @@ load_map_txt (char *path)
                here */
 
             /* Call the entity constructor */
-            if ((*entity_id_list[id]) (y, x) == NULL)
+            if ((*g_ent_id_list[id]) (y, x) == NULL)
               {
                 PERR ();
                 fprintf (stderr, "failed to create entity with id %d "
@@ -160,8 +160,8 @@ draw_map (void)
       draw_map_tile (y, x);
         
   /* Draw all entities */
-  ELNode *node = &elhead;
-  while (node->e != NULL)
+  ELNode *node = g_elhead;
+  while (node != NULL)
     {
       draw_entity (node->e);
       node = node->next;
@@ -196,7 +196,7 @@ draw_map_space (int y, int x)
 
   /* Check if any entities are at the map space coordinates & draw
      them if so */
-  for (ELNode *node = &elhead; node->e != NULL; node = node->next)
+  for (ELNode *node = g_elhead; node != NULL; node = node->next)
     {
       if (node->e->y == y && node->e->x == x)
         {
