@@ -7,15 +7,20 @@
 #include "entity.h"
 #include "player.h"
 
+/* Pointer to the player entity. This assumes that it's only possible
+   for there to be 1 or 0 players at a given time. */
+static Entity *s_player;
+
 /* Create & return a pointer to a new player */
 Entity *
 player_new (int y, int x)
 {
-  return entity_new (player_update, 1, y, x, '@', "Player");
+  s_player = entity_new (player_update, 1, y, x, '@', "Player");
+  return s_player;
 }
 
 /* Update an existing player */
-void
+EntRet
 player_update (Entity *e)
 {
   /* Get input from the user */
@@ -39,4 +44,14 @@ player_update (Entity *e)
       endwin ();
       exit (EXIT_SUCCESS);
     }
+  return ENT_RET_OK;
+}
+
+/* Return true if the player is at the specified coordinates */
+bool
+player_at (int y, int x)
+{
+  if (s_player == NULL)
+    return false;
+  return s_player->y == y && s_player->x == x;
 }

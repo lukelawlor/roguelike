@@ -7,6 +7,6 @@
 Entity *map_editor_new (int y, int x);
 
 /* Update a map editor */
-void map_editor_update (Entity *e);
+EntRet map_editor_update (Entity *e);
 
 #endif

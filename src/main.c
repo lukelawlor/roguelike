@@ -112,24 +112,37 @@ main (void)
     {
       /* Update entities */
       bool player_exists = false;
-      for (ELNode *node = g_elhead; node != NULL; node = node->next)
+      ELNode *i, *next;
+      i = g_elhead;
+      for (;;)
         {
+          if (i == NULL)
+            break;
+          next = i->next;
+          
+          /* Check if the player entity exists */
+          if (i->e->update == player_update)
+            player_exists = true;
+
           /* Increase the entity's 'tick' */
-          if ((node->e->tick += g_game_loop_step_tick)
-              >= node->e->update_tick)
+          if ((i->e->tick += g_game_loop_step_tick)
+              >= i->e->update_tick)
             {
-              /* Call the entity's 'update' function as many times as
-                 the entity's 'tick' goes into its 'update_tick' */
-              int updates = node->e->tick / node->e->update_tick;
-              for (int i = 0; i < updates; i++)
-                (*node->e->update) (node->e);
+              /* Calculate how many times to update the entity */
+              int updates = i->e->tick / i->e->update_tick;
 
               /* Reset the entity's tick */
-              node->e->tick %= node->e->update_tick;
+              i->e->tick %= i->e->update_tick;
+              
+              EntRet ret;
+              for (int j = 0; j < updates; ++j)
+                {
+                  ret = (*i->e->update) (i->e);
+                  if (ret == ENT_RET_DELETE)
+                      break;
+                }
             }
-          /* Check if the player entity exists */
-          if (node->e->update == player_update)
-            player_exists = true;
+          i = next;
         }
 
       /* Increase game time */

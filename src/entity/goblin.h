@@ -7,6 +7,6 @@
 Entity *goblin_new (int y, int x);
 
 /* Update a goblin */
-void goblin_update (Entity *e);
+EntRet goblin_update (Entity *e);
 
 #endif

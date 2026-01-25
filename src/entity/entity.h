@@ -19,10 +19,23 @@
 /* Length of entity id array */
 #define ENT_MAX 3
 
+/* Return values for entity update functions */
+typedef enum {
+  /* Nothing unusual happened when executing the update
+     function */
+  ENT_RET_OK,
+  /* The entity was deleted during the execution of its
+     update function */
+  ENT_RET_DELETE,
+} EntRet;
+
 /* Entity type used to represent entities in the map */
 typedef struct Entity {
-  /* Function run each time the entity is updated */
-  void (*update) (struct Entity *e);
+  /* Function run each time the entity is updated. For memory
+     management purposes, note that this function can cause an entity
+     to be deleted, in which case the function should return
+     'ENT_RET_DELETE'. */
+  EntRet (*update) (struct Entity *e);
 
   /* The number of game ticks that need to go by for the 'update'
      function to be called */
@@ -33,8 +46,7 @@ typedef struct Entity {
   int tick;
 
   /* Position in map */
-  int y;
-  int x;
+  int y, x;
 
   /* Character used to depict the drawn entity */
   char c;
@@ -51,6 +63,9 @@ typedef struct Entity {
   /* Armor class */
   int ac;
 
+  /* Pointer to the entity list node which points to this entity */
+  struct ELNode *node;
+
   /* Pointer to an "extension struct," which contains extra variables
      to extend entity functionality */
   void *s;
@@ -59,7 +74,7 @@ typedef struct Entity {
 /* Entity linked list */
 typedef struct ELNode {
   Entity *e;
-  struct ELNode *next;
+  struct ELNode *next, *prev;
 } ELNode;
 
 /* Pointer to entity list head & tail */
@@ -72,8 +87,11 @@ extern Entity *(*g_ent_id_list[ENT_MAX]) (int y, int x);
 
 /* Create a new entity & add it to the entity list; return a pointer
    to the entity or NULL on error */
-Entity *entity_new (void (*update) (Entity *e), int update_tick,
+Entity *entity_new (EntRet (*update) (Entity *e), int update_tick,
                     int y, int x, char c, char *name);
+
+/* Delete an entity & free the memory used by it */
+void entity_delete (Entity *e);
 
 /* Free the memory of all entities in the entity list */
 void entity_free_all (void);

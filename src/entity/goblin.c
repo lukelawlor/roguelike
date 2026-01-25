@@ -3,6 +3,7 @@
 
 #include "entity.h"
 #include "goblin.h"
+#include "player.h"
 
 /* Return a value from -1 to 0 inclusive, used for randomly moving a
    goblin */
@@ -16,10 +17,16 @@ goblin_new (int y, int x)
 }
 
 /* Update an existing goblin */
-void
+EntRet
 goblin_update (Entity *e)
 {
+  if (player_at (e->y, e->x))
+    {
+      entity_delete (e);
+      return ENT_RET_DELETE;
+    }
   entity_move (e, rand_move (), rand_move ());
+  return ENT_RET_OK;
 }
 
 /* Return a value from -1 to 0 inclusive, used for randomly moving a

@@ -5,8 +5,8 @@
 #include "../error.h"
 #include "../map.h"
 
-/* Return a pointer to an Entity list node with a NULL value for 'e' &
-   'next'; return NULL on error */
+/* Return a pointer to a new Entity list node with a NULL value for
+   'e', 'next' & 'prev'; return NULL on error */
 static ELNode *elnode_new (void);
 
 /* Pointer to entity list head & tail */
@@ -23,7 +23,7 @@ Entity *(*g_ent_id_list[ENT_MAX]) (int y, int x) = {
 
 /* Return a pointer to a new Entity struct or NULL on error */
 Entity *
-entity_new (void (*update) (Entity *e), int update_tick,
+entity_new (EntRet (*update) (Entity *e), int update_tick,
             int y, int x, char c, char *name)
 {
   Entity *e;
@@ -55,6 +55,7 @@ entity_new (void (*update) (Entity *e), int update_tick,
   e->hp = ENT_DEFAULT_HP;
   e->mp = ENT_DEFAULT_MP;
   e->ac = ENT_DEFAULT_AC;
+  e->node = node;
 
   /* NULL initialize 's' */
   e->s = NULL;
@@ -65,28 +66,45 @@ entity_new (void (*update) (Entity *e), int update_tick,
   else
     {
       g_eltail->next = node;
+      node->prev = g_eltail;
       g_eltail = node;
     }
   
   return e;
 }
 
-/* Return a pointer to an Entity list node with a NULL value for 'e' &
-   'next'; return NULL on error */
-static ELNode *
-elnode_new (void)
+/* Delete an entity & free the memory used by it */
+void
+entity_delete (Entity *e)
 {
-  ELNode *node;
-  if ((node = malloc (sizeof (ELNode))) == NULL)
+  ELNode *node, *next, *prev;
+  node = e->node;
+  next = e->node->next;
+  prev = e->node->prev;
+  
+  /* Remove the entity from the entity list */
+  if (node == g_elhead)
     {
-      PERR ();
-      fprintf (stderr,
-               "failed to allocate memory for a new entity node");
-      return NULL;
+      g_elhead = g_elhead->next;
+      if (g_elhead != NULL)
+        g_elhead->prev = NULL;
     }
-  node->e = NULL;
-  node->next = NULL;
-  return node;
+  else if (node == g_eltail)
+    {
+      g_eltail = g_eltail->prev;
+      if (g_eltail != NULL)
+        g_eltail->next = NULL;
+    }
+  else
+    {
+      prev->next = next;
+      next->prev = prev;
+    }
+
+  /* Free the memory of the entity & its list node */
+  free (e->s);
+  free (e);
+  free (node);
 }
 
 /* Free the memory of all entities in the entity list */
@@ -121,4 +139,22 @@ entity_move (Entity *e, int y, int x)
   e->x += x;
   draw_entity (e);
   draw_map_space (e->y - y, e->x - x);
+}
+
+/* Return a pointer to a new Entity list node with a NULL value for
+   'e', 'next' & 'prev'; return NULL on error */
+static ELNode *
+elnode_new (void)
+{
+  ELNode *node;
+  if ((node = malloc (sizeof (ELNode))) == NULL)
+    {
+      PERR ();
+      fprintf (stderr,
+               "failed to allocate memory for a new entity node");
+      return NULL;
+    }
+  node->e = NULL;
+  node->next = node->prev = NULL;
+  return node;
 }

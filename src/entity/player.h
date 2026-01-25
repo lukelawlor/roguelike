@@ -6,6 +6,9 @@
 Entity *player_new (int y, int x);
 
 /* Update a player */
-void player_update (Entity *e);
+EntRet player_update (Entity *e);
+
+/* Return true if the player is at the specified coordinates */
+bool player_at (int y, int x);
 
 #endif

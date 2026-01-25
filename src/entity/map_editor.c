@@ -49,7 +49,7 @@ map_editor_new (int y, int x)
 }
 
 /* Update an existing map editor */
-void
+EntRet
 map_editor_update (Entity *e)
 {
   MapEditor *s = (MapEditor *) e->s;
@@ -85,6 +85,7 @@ map_editor_update (Entity *e)
       endwin ();
       exit (EXIT_SUCCESS);
     }
+  return ENT_RET_OK;
 }
 
 /* Move the map editor */
