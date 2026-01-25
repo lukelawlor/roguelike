@@ -3,9 +3,11 @@
 
 #include <ncurses.h>
 
-#include "../input.h"
 #include "entity.h"
 #include "player.h"
+#include "../input.h"
+#include "../map.h"
+#include "../talk.h"
 
 /* Pointer to the player entity. This assumes that it's only possible
    for there to be 1 or 0 players at a given time. */
@@ -27,18 +29,24 @@ player_update (Entity *e)
   switch (GETC ())
     {
       /* Player movement */
-    case 'j':
-      entity_move (e, 1, 0);
+    case 'j': entity_move (e, 1, 0); break;
+    case 'k': entity_move (e, -1, 0); break;
+    case 'h': entity_move (e, 0, -1); break;
+    case 'l': entity_move (e, 0, 1); break;
+    case 'y': entity_move (e, -1, -1); break;
+    case 'u': entity_move (e, -1, 1); break;
+    case 'b': entity_move (e, 1, -1); break;
+    case 'n': entity_move (e, 1, 1); break;
+      /* Realistic human speech */
+    case 't':
+      talk ("Taa rothar oog agam. ");
       break;
-    case 'k':
-      entity_move (e, -1, 0);
-      break;
-    case 'h':
-      entity_move (e, 0, -1);
-      break;
-    case 'l':
-      entity_move (e, 0, 1);
-      break;
+      /* Die */
+    case 'd':
+      draw_map_tile (e->y, e->x);
+      entity_delete (e);
+      talk ("Noooo. ");
+      return ENT_RET_DELETE;
       /* Quit the game */
     case 'q':
       endwin ();

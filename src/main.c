@@ -11,6 +11,7 @@
 #include "input.h"
 #include "main.h"
 #include "map.h"
+#include "talk.h"
 #include "win.h"
 
 /* Increase in game ticks per game loop iteration */
@@ -104,8 +105,7 @@ main (void)
   /* Print test text */
   waddstr (g_statwin, "statwin");
   wrefresh (g_statwin);
-  waddstr (g_talkwin, "talkwin");
-  wrefresh (g_talkwin);
+  talk ("WELCOME TO THE WORLD. ");
 
   /* Game loop */
   for (;;)
@@ -165,7 +165,14 @@ main (void)
       /* If the player doesn't exist, then ask for some input from the
          user to prevent an infinite loop */
       if (!player_exists)
-        GETC ();
+        {
+          if (GETC () == 'q')
+            {
+                endwin ();
+                exit (EXIT_SUCCESS);
+            }
+        }
+
     }
 
   /* Game end */
