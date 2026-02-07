@@ -10,19 +10,19 @@
 #define MAPWIN_H MAPH
 
 #define INFOWIN_Y 0
-#define INFOWIN_X (MAPW + 1)
-#define INFOWIN_H 6
-#define INFOWIN_W 20
+#define INFOWIN_X MAPW
+#define INFOWIN_H 8
+#define INFOWIN_W 16
 
-#define STATWIN_Y (INFOWIN_H + 2)
+#define STATWIN_Y INFOWIN_H
 #define STATWIN_X INFOWIN_X
-#define STATWIN_H 10
+#define STATWIN_H 16
 #define STATWIN_W INFOWIN_W
 
-#define TALKWIN_Y (MAPH + 1)
+#define TALKWIN_Y MAPH
 #define TALKWIN_X 0
-#define TALKWIN_H 3
-#define TALKWIN_W MAPW
+#define TALKWIN_H 4
+#define TALKWIN_W (MAPW + INFOWIN_W)
 
 /* Game map window */
 extern WINDOW *g_mapwin;

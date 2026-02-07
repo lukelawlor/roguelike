@@ -8,8 +8,8 @@
 #include "entity/entity.h" /* for 'Entity' type */
 
 /* Map height & width */
-#define MAPH 19
-#define MAPW 62
+#define MAPH 20
+#define MAPW 54
 
 /* Number of map tile types & styles for each of them */
 #define MAP_TILE_NUM  2

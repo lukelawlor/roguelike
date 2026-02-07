@@ -1,10 +1,10 @@
 Debug printing
 Print to statwin
+Statwin: show player stats & stats of any entity the player chooses
 Melee attacking enemies
 Fireballs/Arrows
 Enemies shooting fireballs, magic missiles and arrows
 Allies
-Destroying entities
 Random dungeon generation
 Player creation screen
 Game over screen
@@ -30,3 +30,7 @@ Wandering party member
 Less wandering party member
 Cowardly party member
 Aggressive party member
+Resizable map & scrolling view of it
+Handle window resizing well
+Cursed boots that make you only able to walk diagonally
+Add the ability to waste a turn automatically after some seconds?
