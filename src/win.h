@@ -3,6 +3,7 @@
 #ifndef WIN_H
 #define WIN_H
 
+#include "entity/entity.h" /* For 'Entity' */
 #include "map.h" /* for 'MAPW' & 'MAPH' */
 
 /* Window dimensions */
@@ -11,7 +12,7 @@
 
 #define INFOWIN_Y 0
 #define INFOWIN_X MAPW
-#define INFOWIN_H 8
+#define INFOWIN_H 4
 #define INFOWIN_W 16
 
 #define STATWIN_Y INFOWIN_H
@@ -34,6 +35,10 @@ extern WINDOW *g_infowin;
 /* Player statistics or inventory window */
 extern WINDOW *g_statwin;
 
+/* Pointers to entities whose statistics will be printed in
+   statwin. The top entity is printed above the bottom one. */
+extern Entity *g_statwin_ent_top, *g_statwin_ent_bottom;
+
 /* Dialogue window */
 extern WINDOW *g_talkwin;
 
@@ -42,5 +47,8 @@ int init_windows (void);
 
 /* Print to 'g_infowin' & refresh it */
 void draw_infowin (void);
+
+/* Print to 'g_statwin' & refresh it */
+void draw_statwin (void);
 
 #endif

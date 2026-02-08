@@ -20,13 +20,13 @@ extern char *g_area;
 
 /* Game time */
 extern char g_hour, g_min;
-extern long long g_sec;
+extern long long g_day, g_sec;
 
 /* 24 hour time formatting flag */
 extern bool g_hours24;
 
 /* Player entity */
 #include "entity/entity.h"
-extern Entity *player;
+extern Entity *g_player;
 
 #endif

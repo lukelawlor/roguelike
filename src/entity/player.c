@@ -3,11 +3,12 @@
 
 #include <ncurses.h>
 
-#include "entity.h"
-#include "player.h"
 #include "../input.h"
 #include "../map.h"
 #include "../talk.h"
+#include "../win.h" /* for 'g_statwin_ent_top' */
+#include "entity.h"
+#include "player.h"
 
 /* Pointer to the player entity. This assumes that it's only possible
    for there to be 1 or 0 players at a given time. */
@@ -18,6 +19,8 @@ Entity *
 player_new (int y, int x)
 {
   s_player = entity_new (player_update, 1, y, x, '@', "Player");
+  if (s_player != NULL)
+    g_statwin_ent_top = s_player;
   return s_player;
 }
 

@@ -23,6 +23,9 @@ long long g_game_loop_step_sec;
 /* Game area */
 char *g_area;
 
+/* Game day */
+long long g_day;
+
 /* Game hour (0-23) */
 char g_hour;
 
@@ -37,7 +40,7 @@ long long g_sec;
 bool g_hours24;
 
 /* Player entity */
-Entity *player;
+Entity *g_player;
 
 int
 main (void)
@@ -82,8 +85,9 @@ main (void)
 
   /* Set global variables */
   g_game_loop_step_tick = 1;
-  g_game_loop_step_sec = 10;
+  g_game_loop_step_sec = 1000;
   g_area = "Nowhere";
+  g_day = 0;
   g_hour = 14;
   g_min = 43;
   g_sec = 6;
@@ -99,12 +103,10 @@ main (void)
   /* Draw the entire map */
   draw_map ();
 
-  /* Draw infowin */
   draw_infowin ();
+  draw_statwin ();
 
   /* Print test text */
-  waddstr (g_statwin, "statwin");
-  wrefresh (g_statwin);
   talk ("WELCOME TO THE WORLD. ");
 
   /* Game loop */
@@ -156,7 +158,10 @@ main (void)
               g_hour += g_min / 60;
               g_min %= 60;
               if (g_hour > 23)
-                g_hour %= 24;
+                {
+                  g_hour %= 24;
+                  ++g_day;
+                }
             }
         }
 
