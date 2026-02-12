@@ -72,32 +72,28 @@ init_windows (void)
 {
   if ((g_mapwin = newwin (MAPWIN_H, MAPWIN_W, 0, 0)) == NULL)
     {
-      PERR ();
-      fprintf (stderr, "mapwin creation failed");
+      PERR ("mapwin creation failed");
       return 1;
     }
 
   if ((g_infowin
        = newwin (INFOWIN_H, INFOWIN_W, INFOWIN_Y, INFOWIN_X)) == NULL)
     {
-      PERR ();
-      fprintf (stderr, "infowin creation failed");
+      PERR ("infowin creation failed");
       return 1;
     }
 
   if ((g_statwin
        = newwin (STATWIN_H, STATWIN_W, STATWIN_Y, STATWIN_X)) == NULL)
     {
-      PERR ();
-      fprintf (stderr, "statwin creation failed");
+      PERR ("statwin creation failed");
       return 1;
     }
 
   if ((g_talkwin
        = newwin (TALKWIN_H, TALKWIN_W, TALKWIN_Y, TALKWIN_X)) == NULL)
     {
-      PERR ();
-      fprintf (stderr, "talkwin creation failed");
+      PERR ("talkwin creation failed");
       return 1;
     }
 

@@ -6,8 +6,11 @@
 #include <stdbool.h>
 
 /* Game details */
-#define GAME_NAME    "Roguelike"
+#define GAME_NAME "Roguelike"
 #define GAME_VERSION "0.0.0"
+
+/* Game name used in error messages. See './error.c'. */
+#define GAME_NAME_LOWERCASE "roguelike"
 
 /* Increase in game ticks per game loop iteration */
 extern int g_game_loop_step_tick;

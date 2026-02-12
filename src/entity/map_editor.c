@@ -30,9 +30,8 @@ map_editor_new (int y, int x)
   MapEditor *s;
   if ((s = malloc (sizeof (MapEditor))) == NULL)
     {
-      PERR ();
-      fprintf (stderr,"failed to allocate memory for a map editor"
-               " extension struc \n");
+      PERR ("failed to allocate memory for a map editor extension"
+               " struct");
       return NULL;
     }
   Entity *e;

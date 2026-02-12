@@ -48,25 +48,21 @@ main (void)
   /* Initialize ncurses */
   if (initscr () == NULL)
     {
-      PERR ();
-      fprintf (stderr, "failed to initialize ncurses\n");
+      PERR ("failed to initialize ncurses");
       exit (EXIT_FAILURE);
     }
 
   if (noecho () == ERR)
     {
       endwin ();
-      PERR ();
-      fprintf (stderr, "ncurses noecho() call failed\n");
+      PERR ("ncurses 'noecho ()' call failed");
       exit (EXIT_FAILURE);
     }
 
   if (curs_set (0) == ERR)
     {
       endwin ();
-      PERR ();
-      fprintf (stderr,
-               "cursor invisibility not supported by terminal\n");
+      PERR ("cursor invisibility not supported by terminal");
       refresh ();
     }
 
@@ -108,6 +104,7 @@ main (void)
 
   /* Print test text */
   talk ("WELCOME TO THE WORLD. ");
+  PINF ("game started succesfully");
 
   /* Game loop */
   for (;;)

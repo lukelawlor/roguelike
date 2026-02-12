@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 
+#include "../error.h"
 #include "../input.h"
 #include "../map.h"
 #include "../talk.h"
@@ -40,18 +41,18 @@ player_update (Entity *e)
     case 'u': entity_move (e, -1, 1); break;
     case 'b': entity_move (e, 1, -1); break;
     case 'n': entity_move (e, 1, 1); break;
-      /* Realistic human speech */
-    case 't':
+    case 't': /* Realistic human speech */
       talk ("Taa rothar oog agam. ");
       break;
-      /* Die */
-    case 'd':
+    case 'i': /* Realistic computer information delivery */
+      PINF ("eolas gan maith duit");
+      break;
+    case 'd': /* Die */
       draw_map_tile (e->y, e->x);
       entity_delete (e);
       talk ("Noooo. ");
       return ENT_RET_DELETE;
-      /* Quit the game */
-    case 'q':
+    case 'q': /* Quit the game */
       endwin ();
       exit (EXIT_SUCCESS);
     }

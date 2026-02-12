@@ -77,10 +77,8 @@ load_map_txt (char *path)
 
           /* Tile & style not found; use default values & print a
              warning */
-          PERR ();
-          fprintf (stderr,
-                   "map tile & style not found for space at "
-                   "y%d x%d\n", y, x);
+          PERR ("map tile & style not found for space at y%d x%d",
+                y, x);
           ms->tile = MAPTILE_AIR;
           ms->style = 0;
 
@@ -110,9 +108,8 @@ load_map_txt (char *path)
             /* Call the entity constructor */
             if ((*g_ent_id_list[id]) (y, x) == NULL)
               {
-                PERR ();
-                fprintf (stderr, "failed to create entity with id %d "
-                         "at y%d x%d\n", id, y, x);
+                PERR ("failed to create entity with id %d at y%d x%d",
+                      id, y, x);
               }
             break;
           }
@@ -137,9 +134,8 @@ load_map_txt (char *path)
           }
         default:
           {
-            PERR ();
-            fprintf (stderr, "unknown map command found \"%c\"; "
-                     "aborting map command reading.\n", c);
+            PERR ("unknown map command found '%c'; aborting map"
+                  " command reading", c);
             fclose (mapfile);
             return 1;
           }

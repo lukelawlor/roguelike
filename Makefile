@@ -1,3 +1,4 @@
+# Makefile for GNU/Linux
 SRC_DIR := ./src
 BUILD_DIR := ./build
 
@@ -13,6 +14,8 @@ LDFLAGS := -lncurses
 BINNAME := roguelike
 BINPATH := $(BUILD_DIR)/$(BINNAME)
 
+STDERR_OUTPUT_FILE := /tmp/$(BINNAME).log
+
 all: $(BINPATH)
 
 $(BINPATH): $(OBJS)
@@ -23,8 +26,14 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 
 .DELETE_ON_ERROR:
-.PHONY: clean
+.PHONY: clean run run_quiet
 clean:
 	rm -rf $(BUILD_DIR)
+
+run:
+	$(BINPATH) 2>$(STDERR_OUTPUT_FILE)
+
+run_quiet:
+	$(BINPATH) 2>/dev/null
 
 -include $(DEPS)

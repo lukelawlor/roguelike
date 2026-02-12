@@ -29,9 +29,7 @@ entity_new (EntRet (*update) (Entity *e), int update_tick,
   Entity *e;
   if ((e = malloc (sizeof (Entity))) == NULL)
     {
-      PERR ();
-      fprintf (stderr,
-               "failed to allocate memory for a new entity struct\n");
+      PERR ("failed to allocate memory for a new entity struct");
       return NULL;
     }
   ELNode *node;
@@ -149,9 +147,7 @@ elnode_new (void)
   ELNode *node;
   if ((node = malloc (sizeof (ELNode))) == NULL)
     {
-      PERR ();
-      fprintf (stderr,
-               "failed to allocate memory for a new entity node");
+      PERR ("failed to allocate memory for a new entity node");
       return NULL;
     }
   node->e = NULL;

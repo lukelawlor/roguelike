@@ -1,6 +1,5 @@
-Debug printing
-Print to statwin
-Statwin: show player stats & stats of any entity the player chooses
+Use a specific C standard (probably C99)
+Add GPL license notice to every source file
 Melee attacking enemies
 Fireballs/Arrows
 Enemies shooting fireballs, magic missiles and arrows
